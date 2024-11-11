@@ -2,6 +2,7 @@ import random
 import pygame
 import consts
 
+import map
 from block import Block
 from player import Player
 
@@ -16,15 +17,26 @@ class Level:
         self.blocks = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(Player((consts.SCREEN_SIZE[0] / 2, consts.SCREEN_SIZE[1] / 2)))
 
+        blocks = map.generate()
+
         # random block generation
         for y in range(0, consts.SCREEN_SIZE[1], consts.TILE_SIZE):
             for x in range(0, consts.SCREEN_SIZE[0], consts.TILE_SIZE):
-                if random.randint(0, 5) != 0: continue
-                self.blocks.add(Block((x, y)))
+                map_x = int(x / consts.TILE_SIZE)
+                map_y = int(y / consts.TILE_SIZE)
+                if blocks[map_y][map_x]:
+                    self.blocks.add(Block((x, y)))
 
-        # floor
+        # ceiling and floor
         for x in range(0, consts.SCREEN_SIZE[0], consts.TILE_SIZE):
+            self.blocks.add(Block((x, -consts.TILE_SIZE)))
             self.blocks.add(Block((x, consts.SCREEN_SIZE[1])))
+
+        # walls
+        for y in range(0, consts.SCREEN_SIZE[1], consts.TILE_SIZE):
+            self.blocks.add(Block((-consts.TILE_SIZE, y)))
+            self.blocks.add(Block((consts.SCREEN_SIZE[0], y)))
+
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
