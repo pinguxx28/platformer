@@ -20,6 +20,7 @@ def main():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 running = False
 
+        level.handle_input()
         level.update()
         level.draw(window)
         pygame.display.flip()
