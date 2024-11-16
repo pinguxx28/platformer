@@ -40,9 +40,10 @@ class Level:
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]: self.player.sprite.jump()
-        if keys[pygame.K_RIGHT]: self.player.sprite.move_horizontally( consts.PLAYER_X_ACCELERATION)
-        if keys[pygame.K_LEFT ]: self.player.sprite.move_horizontally(-consts.PLAYER_X_ACCELERATION)
+        if keys[pygame.K_DOWN ]: self.player.sprite.move_vertically( consts.PLAYER_ACCELERATION)
+        if keys[pygame.K_UP   ]: self.player.sprite.move_vertically(-consts.PLAYER_ACCELERATION)
+        if keys[pygame.K_RIGHT]: self.player.sprite.move_horizontally( consts.PLAYER_ACCELERATION)
+        if keys[pygame.K_LEFT ]: self.player.sprite.move_horizontally(-consts.PLAYER_ACCELERATION)
 
     def update(self):
         self.player.update(self.blocks)

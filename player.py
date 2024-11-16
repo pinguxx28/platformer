@@ -11,21 +11,22 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = pos
 
         self.velocity = pygame.math.Vector2(0, 0)
-        self.on_ground = False
 
     def update(self, blocks):
-        self.velocity.y += consts.PLAYER_GRAVITY
-        self.velocity.y = min(self.velocity.y, consts.PLAYER_MAX_Y_VELOCITY)
-        self.rect.y += self.velocity.y
+        diagonal_multiplier = 1
+        if self.velocity.y != 0 and self.velocity.x != 0:
+            diagonal_multiplier = 0.707
+
+        self.velocity.y *= consts.PLAYER_FRICTION
+        self.rect.y += self.velocity.y * diagonal_multiplier
         self.vertical_collision(blocks)
 
-        self.velocity.x *= consts.PLAYER_X_FRICTION
-        self.rect.x += self.velocity.x
+        self.velocity.x *= consts.PLAYER_FRICTION
+        self.rect.x += self.velocity.x * diagonal_multiplier
         self.horizontal_collision(blocks)
 
-    def jump(self):
-        if not self.on_ground: return
-        self.velocity.y = consts.PLAYER_JUMP_VELOCITY
+    def move_vertically(self, y_velocity):
+        self.velocity.y += y_velocity
 
     def vertical_collision(self, blocks):
         self.on_ground = False
@@ -33,10 +34,9 @@ class Player(pygame.sprite.Sprite):
         for block in blocks:
             if not self.rect.colliderect(block.rect): continue
 
-            if self.velocity.y > 0:
+            if self.velocity.y > 0: # moving down
                 self.rect.bottom = block.rect.top
-                self.on_ground = True
-            elif self.velocity.y < 0:
+            else:
                 self.rect.top = block.rect.bottom
 
             self.velocity.y = 0
@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
 
             if self.velocity.x > 0: # moving right
                 self.rect.right = block.rect.left
-            elif self.velocity.x < 0: # moving left
+            else:
                 self.rect.left = block.rect.right
 
             self.velocity.x = 0
