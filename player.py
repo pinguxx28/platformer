@@ -11,6 +11,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.topleft = pos
 
         self.velocity = pygame.math.Vector2(0, 0)
+        self.facing = pygame.math.Vector2(1, 0)
 
     def update(self, blocks):
         diagonal_multiplier = 1
@@ -27,6 +28,7 @@ class Player(pygame.sprite.Sprite):
 
     def move_vertically(self, y_velocity):
         self.velocity.y += y_velocity
+        self.facing = pygame.math.Vector2(0, y_velocity)
 
     def vertical_collision(self, blocks):
         self.on_ground = False
@@ -44,6 +46,7 @@ class Player(pygame.sprite.Sprite):
 
     def move_horizontally(self, x_velocity):
         self.velocity.x += x_velocity
+        self.facing = pygame.math.Vector2(x_velocity, 0)
 
     def horizontal_collision(self, blocks):
         for block in blocks:
@@ -56,3 +59,10 @@ class Player(pygame.sprite.Sprite):
 
             self.velocity.x = 0
             break
+
+    def draw_facing(self, screen):
+        facing = pygame.math.Vector2(
+                self.rect.centerx + self.facing.x * (self.rect.width / 2),
+                self.rect.centery + self.facing.y * (self.rect.height / 2))
+
+        pygame.draw.circle(screen, "red", facing, 3)

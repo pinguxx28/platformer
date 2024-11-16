@@ -37,7 +37,6 @@ class Level:
             self.blocks.add(Block((-consts.TILE_SIZE, y)))
             self.blocks.add(Block((consts.SCREEN_SIZE[0], y)))
 
-
     def handle_input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_DOWN ]: self.player.sprite.move_vertically( consts.PLAYER_ACCELERATION)
@@ -55,6 +54,7 @@ class Level:
         # screen objects
         self.blocks.draw(self.screen)
         self.player.draw(self.screen)
+        self.player.sprite.draw_facing(self.screen)
 
         # window background => screen => screen border
         window.fill(consts.WINDOW_COLOR) 
