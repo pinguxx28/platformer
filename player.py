@@ -1,6 +1,8 @@
 import pygame
 import consts
 
+from bullet import Bullet
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
         super().__init__()
@@ -13,7 +15,12 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(0, 0)
         self.facing = pygame.math.Vector2(1, 0)
 
+        self.shoot_cooldown = 0
+
     def update(self, blocks):
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1
+
         diagonal_multiplier = 1
         if self.velocity.y != 0 and self.velocity.x != 0:
             diagonal_multiplier = 0.707
@@ -79,4 +86,11 @@ class Player(pygame.sprite.Sprite):
         for block in blocks:
             if block.rect.topleft == map:
                 block.destroy()
+
+    def shoot(self, bullets):
+        if self.shoot_cooldown > 0: return
+
+        bullets.add(Bullet(self.rect.center, self.facing))
+        self.shoot_cooldown = 20
+
 

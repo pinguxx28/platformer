@@ -15,6 +15,7 @@ class Level:
 
     def reset(self):
         self.blocks = pygame.sprite.Group()
+        self.bullets = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle(Player((consts.SCREEN_SIZE[0] / 2, consts.SCREEN_SIZE[1] / 2)))
 
         blocks = map.generate()
@@ -44,9 +45,11 @@ class Level:
         if keys[pygame.K_RIGHT]: self.player.sprite.move_horizontally( consts.PLAYER_ACCELERATION)
         if keys[pygame.K_LEFT ]: self.player.sprite.move_horizontally(-consts.PLAYER_ACCELERATION)
         if keys[pygame.K_x]: self.player.sprite.mine_block(self.blocks)
+        if keys[pygame.K_z]: self.player.sprite.shoot(self.bullets)
 
     def update(self):
         self.blocks.update()
+        self.bullets.update(self.blocks)
         self.player.update(self.blocks)
 
     def draw(self, window):
@@ -55,6 +58,7 @@ class Level:
 
         # screen objects
         self.blocks.draw(self.screen)
+        self.bullets.draw(self.screen)
         self.player.draw(self.screen)
         self.player.sprite.draw_facing(self.screen)
 
