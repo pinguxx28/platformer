@@ -109,4 +109,7 @@ class Player(pygame.sprite.Sprite):
         bullets.add(Bullet(self.rect.center, self.facing))
         self.shoot_cooldown = 20
 
+    def clear_shoot_cooldown(self):
+        self.shoot_cooldown = 0
+
 

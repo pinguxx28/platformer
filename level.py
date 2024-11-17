@@ -44,9 +44,12 @@ class Level:
         if keys[pygame.K_UP   ]: self.player.sprite.move_vertically(-consts.PLAYER_ACCELERATION)
         if keys[pygame.K_RIGHT]: self.player.sprite.move_horizontally( consts.PLAYER_ACCELERATION)
         if keys[pygame.K_LEFT ]: self.player.sprite.move_horizontally(-consts.PLAYER_ACCELERATION)
+
         if keys[pygame.K_c]: self.player.sprite.place_block(self.blocks)
         if keys[pygame.K_x]: self.player.sprite.mine_block(self.blocks)
+
         if keys[pygame.K_z]: self.player.sprite.shoot(self.bullets)
+        if not keys[pygame.K_z]: self.player.sprite.clear_shoot_cooldown()
 
     def update(self):
         self.blocks.update()
