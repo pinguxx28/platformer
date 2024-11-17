@@ -66,3 +66,17 @@ class Player(pygame.sprite.Sprite):
                 self.rect.centery + self.facing.y * (self.rect.height / 2))
 
         pygame.draw.circle(screen, "red", facing, 3)
+
+    def mine_block(self, blocks):
+        pos = pygame.math.Vector2(
+                self.rect.centerx + self.facing.x * self.rect.width,
+                self.rect.centery + self.facing.y * self.rect.height)
+
+        map = pygame.math.Vector2(
+                int(pos.x / consts.TILE_SIZE) * consts.TILE_SIZE,
+                int(pos.y / consts.TILE_SIZE) * consts.TILE_SIZE)
+
+        for block in blocks:
+            if block.rect.topleft == map:
+                block.destroy()
+
