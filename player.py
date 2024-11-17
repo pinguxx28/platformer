@@ -16,11 +16,12 @@ class Player(pygame.sprite.Sprite):
         self.velocity = pygame.math.Vector2(0, 0)
         self.facing = pygame.math.Vector2(1, 0)
 
+        self.break_cooldown = 0
         self.shoot_cooldown = 0
 
     def update(self, blocks):
-        if self.shoot_cooldown > 0:
-            self.shoot_cooldown -= 1
+        if self.shoot_cooldown > 0: self.shoot_cooldown -= 1
+        if self.break_cooldown > 0: self.break_cooldown -= 1
 
         diagonal_multiplier = 1
         if self.velocity.y != 0 and self.velocity.x != 0:
@@ -84,20 +85,23 @@ class Player(pygame.sprite.Sprite):
                 int(newpos.x / consts.TILE_SIZE) * consts.TILE_SIZE,
                 int(newpos.y / consts.TILE_SIZE) * consts.TILE_SIZE)
 
-        blocks.add(Block(map))
+        blocks.add(Block(mappos))
 
     def mine_block(self, blocks):
-        pos = pygame.math.Vector2(
+        if self.break_cooldown > 0: return
+
+        newpos = pygame.math.Vector2(
                 self.rect.centerx + self.facing.x * self.rect.width,
                 self.rect.centery + self.facing.y * self.rect.height)
 
-        map = pygame.math.Vector2(
-                int(pos.x / consts.TILE_SIZE) * consts.TILE_SIZE,
-                int(pos.y / consts.TILE_SIZE) * consts.TILE_SIZE)
+        mappos = pygame.math.Vector2(
+                int(newpos.x / consts.TILE_SIZE) * consts.TILE_SIZE,
+                int(newpos.y / consts.TILE_SIZE) * consts.TILE_SIZE)
 
         for block in blocks:
-            if block.rect.topleft == map:
+            if block.rect.topleft == mappos:
                 block.destroy()
+                self.break_cooldown = 20
 
     def shoot(self, bullets):
         if self.shoot_cooldown > 0: return
