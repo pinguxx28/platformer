@@ -1,6 +1,7 @@
 import pygame
 import consts
 
+from block import Block
 from bullet import Bullet
 
 class Player(pygame.sprite.Sprite):
@@ -73,6 +74,17 @@ class Player(pygame.sprite.Sprite):
                 self.rect.centery + self.facing.y * (self.rect.height / 2))
 
         pygame.draw.circle(screen, "red", facing, 3)
+
+    def place_block(self, blocks):
+        newpos = pygame.math.Vector2(
+                self.rect.centerx + self.facing.x * (self.rect.width  * 1.5),
+                self.rect.centery + self.facing.y * (self.rect.height * 1.5))
+
+        mappos = pygame.math.Vector2(
+                int(newpos.x / consts.TILE_SIZE) * consts.TILE_SIZE,
+                int(newpos.y / consts.TILE_SIZE) * consts.TILE_SIZE)
+
+        blocks.add(Block(map))
 
     def mine_block(self, blocks):
         pos = pygame.math.Vector2(
