@@ -101,13 +101,13 @@ class Player(pygame.sprite.Sprite):
         for block in blocks:
             if block.rect.topleft == mappos:
                 block.destroy()
-                self.break_cooldown = 20
+                self.break_cooldown = consts.BREAK_COOLDOWN
 
     def shoot(self, bullets):
         if self.shoot_cooldown > 0: return
 
         bullets.add(Bullet(self.rect.center, self.facing))
-        self.shoot_cooldown = 20
+        self.shoot_cooldown = consts.SHOOT_COOLDOWN
 
     def clear_shoot_cooldown(self):
         self.shoot_cooldown = 0
